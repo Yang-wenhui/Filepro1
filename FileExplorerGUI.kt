@@ -67,48 +67,8 @@ public class FileExplorerGUI extends JFrame {
 
         add(mainPanel);
     }
-//搜索文件功能01、11
-    private void searchFiles() {
-        String directory = directoryTextField.getText();
-        String fileName = fileNameTextField.getText();
-        List<String> result = FileSearch.searchFiles(directory, fileName);
-        resultTextArea.setText(String.join("\n", result));
-    }
 
-    private void copyFile() {
-        String directory = directoryTextField.getText();
-        String fileName = fileNameTextField.getText();
-        List<String> searchResult = FileSearch.searchFiles(directory, fileName);
-        if (!searchResult.isEmpty()) {
-            copiedFilePath = searchResult.get(0); // 保存第一个匹配的文件路径
-            // 将文件路径复制到系统剪贴板
-            StringSelection stringSelection = new StringSelection(copiedFilePath);
-            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            clipboard.setContents(stringSelection, null);
-            JOptionPane.showMessageDialog(null, "文件路径已复制到剪贴板：" + copiedFilePath);
-        } else {
-            JOptionPane.showMessageDialog(null, "未找到匹配的文件");
-        }
-    }
-//文件复制粘贴相关操作11
-    private void pasteFile() {
-        if (copiedFilePath == null || copiedFilePath.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "剪贴板中没有文件路径");
-            return;
-        }
 
-        // 提示用户输入目标路径
-        String destinationPath = JOptionPane.showInputDialog("请输入目标文件路径：");
-        if (destinationPath != null && !destinationPath.isEmpty()) {
-            try {
-                FileOperations.copyFile(copiedFilePath, destinationPath);
-                JOptionPane.showMessageDialog(null, "文件粘贴成功：" + destinationPath);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "文件粘贴失败");
-            }
-        }
-    }
 
     private void renameFile() {
         String directory = directoryTextField.getText();
@@ -134,24 +94,7 @@ public class FileExplorerGUI extends JFrame {
         JOptionPane.showMessageDialog(null, "文件夹中的文件数量：" + fileCount);
     }
     
-//文件预览功能相关代码11
-    private void previewFile() {
-        String directory = directoryTextField.getText();
-        String fileName = fileNameTextField.getText();
-        List<String> searchResult = FileSearch.searchFiles(directory, fileName);
-        if (!searchResult.isEmpty()) {
-            String filePath = searchResult.get(0);
-            try {
-                String previewContent = FileOperations.previewTextFile(filePath, 100);
-                showPreviewWindow(previewContent);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(null, "文件预览失败");
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "未找到匹配的文件");
-        }
-    }
+
 
     private void showPreviewWindow(String content) {
         JTextArea previewTextArea = new JTextArea(content);
